@@ -1,6 +1,7 @@
 import os
 from pyicloud import PyiCloudService
 from tqdm import tqdm
+import time
 
 
 def icloud_download():
@@ -39,6 +40,8 @@ def icloud_download():
     else:
         print("Sucesso ao configurar seu modo desevolvedor.")
 
+    print("Sucesso ao configurar seu modo desevolvedor.")
+    time.sleep(15)
     # Get all photos and videos
     try:
         photos = api.photos.all
