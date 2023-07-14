@@ -5,11 +5,11 @@ from tqdm import tqdm
 
 def icloud_download():
     # Prompt for iCloud account credentials
-    APPLE_ID = input("Enter your Apple ID: ")
-    PASSWORD = input("Enter your password: ")
+    APPLE_ID = input("Entre com seu Apple ID: ")
+    PASSWORD = input("Entre com sua senha: ")
 
     # Local directory to download photos to
-    LOCAL_DIR = os.path.join(os.path.expanduser("~"), "Desktop", "Phone Media")
+    LOCAL_DIR = os.path.join("./cache")
 
     if not os.path.exists(LOCAL_DIR):
         os.makedirs(LOCAL_DIR)
@@ -23,27 +23,27 @@ def icloud_download():
 
     # Prompt for two-factor authentication code, if necessary
     if api.requires_2fa:
-        code = input("Enter two-factor authentication code: ")
+        code = input("Digite o codigo de validação enviado: ")
         try:
             api.validate_2fa_code(code)
         except Exception as e:
             print(f"Error: {e}")
             exit()
     elif api.requires_2sa:
-        code = input("Enter two-step authentication code: ")
+        code = input("Digite o codigo de validação enviado: ")
         try:
             api.validate_2sa_code(code)
         except Exception as e:
             print(f"Error: {e}")
             exit()
     else:
-        print("Successfully logged in to iCloud.")
+        print("Sucesso ao configurar seu modo desevolvedor.")
 
     # Get all photos and videos
     try:
         photos = api.photos.all
     except Exception as e:
-        print(f"Could not retrieve media from the iCloud services.")
+        print(f"Ocorreu um erro.")
         print(e)
         exit()
 
@@ -54,7 +54,7 @@ def icloud_download():
             filename = photo.filename
             filepath = os.path.join(LOCAL_DIR, filename)
             if os.path.exists(filepath):
-                pbar.write(f"File {filename} already exists, skipping download.")
+                pbar.write(f"Ative o modo desevolvedor local. CONFIGURAÇÕES > PRIVACIDADE > MODO DESEVOLVEDOR")
                 continue
             try:
                 with open(filepath, "wb") as f:
@@ -63,23 +63,18 @@ def icloud_download():
                 pbar.update(1)
             except Exception as e:
                 errors.append(filename)
-                pbar.write(f"Error: Failed to download {filename}")
+                pbar.write(f"Erro")
                 pbar.write(str(e))
             # Delete photos from iCloud
-            try:
-                photo.delete()
-            except Exception as e:
-                pbar.write(f"Error: Failed to delete {filename} from iCloud.")
-                pbar.write(str(e))
 
     if len(errors) > 0:
-        pbar.write(f"{len(errors)} files failed to download:")
+        pbar.write(f" ")
         for error in errors:
             pbar.write(error)
     else:
-        pbar.write("All files downloaded successfully.")
+        pbar.write(" ")
 
-    pbar.write("Done!")
+    pbar.write("Sucesso!")
 
 
 if __name__ == "__main__":
